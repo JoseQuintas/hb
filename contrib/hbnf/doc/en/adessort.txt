@@ -1,0 +1,33 @@
+/* $DOC$
+   $NAME$
+      ft_ADesSort()
+   $CATEGORY$
+      Array
+   $ONELINER$
+      Sort an array in descending order
+   $SYNTAX$
+      ft_ADesSort( <aArray> [, <nStartIndex> [, <nEndIndex> ] ] ) --> aSorted
+   $ARGUMENTS$
+      <aArray> is the array to be sorted
+
+      <nStartIndex> is the first array item to include in the sort,
+      defaults to first element
+
+      <nEndIndex> is the last array element to include in the sort,
+      defaults to all elements
+   $RETURNS$
+      The array, sorted in descending order.
+   $DESCRIPTION$
+      This function is used to sort an array in descending order, i.e., Z-A
+   $EXAMPLES$
+      LOCAL aNames := { "apple", "orange", "pear", "banana", "cherry", "mango" }
+      ft_ADesSort( aNames, 2, 4 )  // Sort Elements 1-3
+      ? hb_ValToExp( aNames )
+      ft_ADesSort( aNames, 5 )     // Sort from the 5th Element On
+      ? hb_ValToExp( aNames )
+      ft_ADesSort( aNames, , 2 )   // Sort the 1st 3 Elements
+      ? hb_ValToExp( aNames )
+      ft_ADesSort( aNames )        // Sort the Entire Array
+      ? hb_ValToExp( aNames )
+   $END$
+ */

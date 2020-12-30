@@ -1,0 +1,11 @@
+-hblib
+-inc
+
+-o${hb_name}
+
+-w3 -es2
+
+-hbx=${hb_name}
+
+hbfmtcls.prg
+hbfuncs.prg

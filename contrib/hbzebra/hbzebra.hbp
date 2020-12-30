@@ -1,0 +1,25 @@
+-hblib
+-inc
+
+-o${hb_name}
+
+-w3 -es2
+
+-hbx=${hb_name}
+
+# Core
+core.c
+coredraw.c
+
+# Barcodes
+codabar.c
+code11.c
+code128.c
+code39.c
+code93.c
+eanupc.c
+itf.c
+msi.c
+pdf417.c
+datamtrx.c
+qrcode.c

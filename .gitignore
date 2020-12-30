@@ -1,0 +1,37 @@
+# To validate, run:
+#   'git ls-files -i --exclude-standard'
+
+# build generated files
+/include/hbverbld.h
+/include/_repover.txt
+bin/*/
+lib/*/
+obj
+.hbmk/
+*.hbl
+*.hbd
+*.hbr
+*.hrb
+
+# 'install'-ed binaries
+*.exe
+*.dll
+*.dxe
+*.dylib
+*.so
+*.sl
+*.lib
+*.a
+
+# packages
+/pkg/
+
+# not hosted contribs
+/addons/
+
+# misc junk
+.DS_Store
+*.bak
+
+# exceptions
+!/*.exe

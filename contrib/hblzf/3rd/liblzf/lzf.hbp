@@ -1,0 +1,29 @@
+-stop{hbdyn&!(HB_BUILD_3RD_DYN='yes')} -env:__HB_3RD_DYN=yes{hbdyn}
+
+-hblib
+-inc
+
+-o${hb_name}
+
+-warn=no
+-cpp=no
+-pic
+
+# See lzfP.h for more
+-cflag=-DVERY_FAST=1
+-cflag=-DAVOID_ERRNO=1{wce}
+-cflag=-DWIN32{win}
+-cflag=-D_int64=__int64{allmingw|allclang}
+
+lzf_c.c
+lzf_d.c
+
+# ORIGIN http://oldhome.schmorp.de/marc/liblzf.html
+# URL    http://dist.schmorp.de/liblzf/liblzf-3.6.tar.gz
+#
+# MAP    LICENSE
+# MAP    crc32.h
+# MAP    lzf.h
+# MAP    lzf_c.c
+# MAP    lzf_d.c
+# MAP    lzfP.h

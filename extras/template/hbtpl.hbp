@@ -1,0 +1,35 @@
+# Project build file
+
+-hblib
+-inc
+
+-olib/${hb_plat}/${hb_comp}/${hb_name}
+
+-w3 -es2
+
+# NOTE: Adapt and uncomment, if the library has a 3rd party lib dependency
+# -depurlbase=lib3rd:https://example.org/
+# -deppkgname=lib3rd:lib3rd-devel{rpm}
+# -deppkgname=lib3rd:lib3rd-dev{deb}
+# -deppkgname=lib3rd:lib3rd{homebrew}
+# -depkeyhead=lib3rd:lib3rd.h
+# -depcontrol=lib3rd:${HB_WITH_LIB3RD}
+# -depincpath=lib3rd:/usr/include
+# -depincpath=lib3rd:/boot/common/include
+# -depimplibs=lib3rd:../dll/lib3rd.dll
+# -depimplibd=lib3rd:lib3rd
+# -depfinish=lib3rd
+
+# NOTE: Uncomment if you store headers in this alternate subdirectory
+# -iinclude
+
+-hbx=${hb_name}
+
+core.prg
+corec.c
+
+$hb_pkg_dynlib.hbm
+$hb_pkg_install.hbm
+
+# Harbour lib dependencies
+hbct.hbc

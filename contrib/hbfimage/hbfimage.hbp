@@ -1,0 +1,37 @@
+-hblib
+-inc
+
+-o${hb_name}
+
+-w3 -es2
+
+-stop{dos|os2}
+
+hbwin.hbc{allwin}
+
+-depurlbase=freeimage:https://sourceforge.net/projects/freeimage/
+-deppkgname=freeimage:libfreeimage-dev{deb}
+-deppkgname=freeimage:freeimage-devel{rpm}
+-deppkgname=freeimage:freeimage{homebrew|pkgng}
+-deppkgname=freeimage:freeimage{pacman}
+-deppkgname=freeimage:mingw-w64-i686-freeimage{msys2&x86}
+-deppkgname=freeimage:mingw-w64-x86_64-freeimage{msys2&x86_64}
+-depkeyhead=freeimage:FreeImage.h
+-depcontrol=freeimage:no{HB_BUILD_3RDEXT='no'}
+-depcontrol=freeimage:${HB_WITH_FREEIMAGE}
+-depincpath=freeimage:/usr/include
+-depincpath=freeimage:/usr/local/include
+-depincpath=freeimage:/usr/local/opt/freeimage/include
+-depimplibs=freeimage:FreeImage.dll
+-depimplibs=freeimage:../lib/libfreeimage.dll.a{allwinar}
+-depimplibd=freeimage:freeimage
+
+# For FreeImage headers
+#-c=gnu90
+
+-cflag=-DFREEIMAGE_LIB{HB_STATIC_FREEIMAGE}
+
+-hbx=${hb_name}
+
+core.c
+win.c{allwin}

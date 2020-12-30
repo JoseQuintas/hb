@@ -1,0 +1,38 @@
+-stop{hbdyn&!(HB_BUILD_3RD_DYN='yes')} -env:__HB_3RD_DYN=yes{hbdyn}
+
+-stop{wce|pocc64}
+
+-hblib
+-inc
+
+-o${hb_name}
+
+-warn=low
+-cpp=no
+-pic
+
+blocksort.c
+bzlib.c
+compress.c
+crctable.c
+decompress.c
+huffman.c
+randtable.c
+
+{bcc}-aflag=/C
+
+-cflag=-DBZ_STRICT_ANSI
+-cflag=-DBZ_NO_STDIO{!hbdyn}
+
+# URL    https://sourceware.org/pub/bzip2/bzip2-1.0.6.tar.gz
+#
+# MAP    LICENSE
+# MAP    blocksort.c
+# MAP    bzlib.c
+# MAP    bzlib.h
+# MAP    bzlib_private.h
+# MAP    compress.c
+# MAP    crctable.c
+# MAP    decompress.c
+# MAP    huffman.c
+# MAP    randtable.c

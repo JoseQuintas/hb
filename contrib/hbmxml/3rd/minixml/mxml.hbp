@@ -1,0 +1,50 @@
+-stop{hbdyn&!(HB_BUILD_3RD_DYN='yes')} -env:__HB_3RD_DYN=yes{hbdyn}
+
+-hblib
+-inc
+
+-o${hb_name}
+
+-warn=low
+-cpp=no
+-pic
+
+# __inline__ keyword
+#{sunos}-c=gnu90
+
+{win}-cflag=-DWIN32
+{win|dos|os2}-cflag=-D_EOL_CRLF
+{allmsvc}-cflag=-D_CRT_SECURE_NO_DEPRECATE
+{allmsvc}-cflag=-D_CRT_SECURE_NO_WARNINGS
+-cflag=-DHAVE_LONG_LONG=1{!allbcc}
+-cflag=-DHB_USE_CORE_PRINTF{!hbdyn}
+
+mxml-attr.c
+mxml-entity.c
+mxml-file.c
+mxml-get.c
+mxml-index.c
+mxml-node.c
+mxml-private.c
+mxml-search.c
+mxml-set.c
+mxml-string.c
+
+# ORIGIN https://michaelrsweet.github.io/mxml/
+# URL    https://github.com/michaelrsweet/mxml/releases/download/v2.11/mxml-2.11.tar.gz
+# DIFF   mxml.diff
+#
+# MAP    COPYING
+# MAP    config.h.in     config.h
+# MAP    mxml-attr.c
+# MAP    mxml-entity.c
+# MAP    mxml-file.c
+# MAP    mxml-get.c
+# MAP    mxml-index.c
+# MAP    mxml-node.c
+# MAP    mxml-private.c
+# MAP    mxml-private.h
+# MAP    mxml-search.c
+# MAP    mxml-set.c
+# MAP    mxml-string.c
+# MAP    mxml.h

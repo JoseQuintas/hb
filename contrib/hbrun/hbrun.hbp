@@ -1,0 +1,50 @@
+# Copyright 2009-2017 Viktor Szakats (vsz.me/hb)
+
+# Build in shared mode for these platforms because it's required for dynamic
+# extension loading. (only do that if HB_BUILD_CONTRIB_DYN is enabled, meaning
+# there exist actual dynamic extensions to be loaded.)
+# This must come before including hbmk2.hbp.
+{_HB_BUILD_&!(HB_BUILD_SHARED='no')&!(HB_BUILD_CONTRIB_DYN='no')&(win|wce|os2)}-shared
+{shared}-env:__HBMKDYN=yes
+
+@../../utils/hbmk2/hbmk2.hbp
+
+-o${hb_name}
+
+-DHBMK_PROGNAME=hbrun{abstr}
+
+-DHBMK_WITH_BUILTIN_HEADERS_ALL
+
+-DHBMK_WITH_GTXWC{HBMK_WITH_GTXWC='yes'}
+-gtxwc{HBMK_WITH_GTXWC='yes'}
+
+{__HBMKDYN='yes'}-env:_HBMK_WITH_EXTS=hbbz2|hbcrypto|hbct|hbexpat|hbmzip|hbnf|hbtip|hbyaml|hbbz2io|hbcomio|hbgzio|hbmemio|hbnetio|hbpipeio|hbtcpio
+{__HBMKDYN='yes'&unix}-env:_HBMK_WITH_EXTS+|hbunix
+{__HBMKDYN='yes'&allwin}-env:_HBMK_WITH_EXTS+|hbwin
+{__HBMKDYN='yes'&darwin}-env:_HBMK_WITH_EXTS+|hbmac
+{__HBMKDYN='yes'}-DHBMK_WITH_EXTS=${_HBMK_WITH_EXTS}
+
+{!(__HBMKDYN='yes')}hbbz2.hbc        {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBBZ2__
+{!(__HBMKDYN='yes')}hbcrypto.hbc     {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBCRYPTO__
+{!(__HBMKDYN='yes')}hbct.hbc         {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBCT__
+{!(__HBMKDYN='yes')}hbexpat.hbc      {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBEXPAT__
+{!(__HBMKDYN='yes')}hbmzip.hbc       {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBMZIP__
+{!(__HBMKDYN='yes')}hbnf.hbc         {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBNF__
+{!(__HBMKDYN='yes')}hbtip.hbc        {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBTIP__
+{!(__HBMKDYN='yes')}hbyaml.hbc       {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBYAML__
+{!(__HBMKDYN='yes')}hbbz2io.hbc      {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBBZ2IO__
+{!(__HBMKDYN='yes')}hbcomio.hbc      {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBCOMIO__
+{!(__HBMKDYN='yes')}hbgzio.hbc       {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBGZIO__
+{!(__HBMKDYN='yes')}hbmemio.hbc      {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBMEMIO__
+{!(__HBMKDYN='yes')}hbnetio.hbc      {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBNETIO__
+{!(__HBMKDYN='yes')}hbpipeio.hbc     {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBPIPEIO__
+{!(__HBMKDYN='yes')}hbtcpio.hbc      {!(__HBMKDYN='yes')}-request=__HBEXTERN__HBTCPIO__
+{!(__HBMKDYN='yes')&unix}hbunix.hbc  {!(__HBMKDYN='yes')&unix}-request=__HBEXTERN__HBUNIX__
+{!(__HBMKDYN='yes')&allwin}hbwin.hbc {!(__HBMKDYN='yes')&allwin}-request=__HBEXTERN__HBWIN__
+{!(__HBMKDYN='yes')&darwin}hbmac.hbc {!(__HBMKDYN='yes')&darwin}-request=__HBEXTERN__HBMAC__
+
+# localization (for automatization with config/lang.hb)
+-3rd=_langhb_entry=../../utils/hbmk2/
+-3rd=_langhb_docext=.md
+-3rd=_langhb_docoption=-lang={LNG}
+-3rd=_langhb_docoption=-fullhelpmdsh

@@ -1,0 +1,6 @@
+description=SuperLib port to Harbour
+
+incpaths=.
+libpaths=lib/${hb_plat}/${hb_comp}
+
+libs=superlib

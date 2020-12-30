@@ -1,0 +1,8 @@
+-q0 -w3 -es2 -kmo -l
+
+-nulrdd
+hbi18n.prg
+
+../../package/harbour.hbc
+
+{!(HB_BUILD_SHARED='no')&(win|wce|os2)}-shared

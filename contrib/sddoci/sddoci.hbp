@@ -1,0 +1,33 @@
+-hblib
+-inc
+
+-o${hb_name}
+
+-w3 -es2
+
+rddsql.hbc
+
+-stop{dos|os2|wce}
+
+-depurlbase=ocilib:https://vrogier.github.io/ocilib/
+-depurlbase=ocilib:https://www.oracle.com/technetwork/database/features/oci/
+-deppkgname=ocilib:ocilib-devel{rpm}
+-depkeyhead=ocilib:ocilib.h
+-depcontrol=ocilib:no{HB_BUILD_3RDEXT='no'}
+-depcontrol=ocilib:${HB_WITH_OCILIB}
+-depincpath=ocilib:/usr/include
+-depincpath=ocilib:/usr/local/include
+-depimplibs=ocilib:../lib32/ociliba.dll{win&x86}
+-depimplibs=ocilib:../lib32/ocilibw.dll{win&x86}
+-depimplibs=ocilib:../lib64/ociliba.dll{win&x86_64}
+-depimplibs=ocilib:../lib64/ocilibw.dll{win&x86_64}
+
+# Using prebuilt static libs with MinGW/Clang
+-cflag=-DOCI_API=_stdcall{win&(mingw|clang)}
+# Required to link against generated implib
+-cflag=-DOCI_API=_stdcall{bcc}
+
+-hbx=${hb_name}
+
+core.c
+libinfo.c

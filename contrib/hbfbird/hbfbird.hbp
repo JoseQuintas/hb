@@ -1,0 +1,32 @@
+-hblib
+-inc
+
+-o${hb_name}
+
+-w3 -es2
+
+-stop{pocc64|poccarm}
+
+-depurlbase=firebird:https://firebirdsql.org/
+-deppkgname=firebird:firebird2.5-dev{deb}
+-deppkgname=firebird:firebird-devel{rpm}
+-deppkgname=firebird:firebird25-client{pkgng}
+-deppkgname=firebird:libfbclient{pacman}
+-depkeyhead=firebird:ibase.h
+-depcontrol=firebird:no{HB_BUILD_3RDEXT='no'}
+-depcontrol=firebird:${HB_WITH_FIREBIRD}
+-depincpath=firebird:/usr/include
+-depincpath=firebird:/usr/local/include
+-depincpath=firebird:/opt/firebird/include
+-depincpath=firebird:/Library/Frameworks/Firebird.framework/Headers
+-depimplibs=firebird:../bin/fbclient.dll{!(allgcc|allmsvc|allpocc)|hbdyn}
+-depimplibs=firebird:../lib/fbclient_ms.lib{(allgcc|allmsvc|allpocc)&!hbdyn}
+-depimplibd=firebird:fbclient
+
+# For Firebird headers
+#-c=gnu90
+
+-hbx=${hb_name}
+
+firebird.c
+tfirebrd.prg

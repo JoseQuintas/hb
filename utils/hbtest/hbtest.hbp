@@ -1,0 +1,10 @@
+-q0 -w3 -es2 -kmo
+
+hbtest.prg
+
+-DRT_HAS_C
+hbtestc.c
+
+../../package/harbour.hbc
+
+{!(HB_BUILD_SHARED='no')&(win|wce|os2)}-shared

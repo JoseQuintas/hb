@@ -1,0 +1,27 @@
+/* $DOC$
+   $NAME$
+      ft_MkDir()
+   $CATEGORY$
+      DOS/BIOS
+   $ONELINER$
+      Create a subdirectory
+   $SYNTAX$
+      ft_MkDir(  <cDirName> ) --> nResult
+   $ARGUMENTS$
+      <cDirName> is the name of the directory to create.
+   $RETURNS$
+      0   if successful
+      3   if Path Not Found
+      5   if Access Denied or directory already exists
+      99  if invalid parameters passed
+   $DESCRIPTION$
+      Use this function to create the subdirectories needed by your
+      application.  It might be especially useful in an installation
+      program.
+   $EXAMPLES$
+      ? ft_MkDir( "mydir" )
+      ? ft_MkDir( hb_DirSepToOS( "/mydir" ) )
+      ? ft_MkDir( hb_DirSepToOS( "./mydir" ) )
+      ? ft_MkDir( hb_DirSepToOS( "../mydir" ) )
+   $END$
+ */

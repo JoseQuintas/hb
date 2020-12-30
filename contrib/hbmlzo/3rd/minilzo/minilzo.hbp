@@ -1,0 +1,21 @@
+-stop{hbdyn&!(HB_BUILD_3RD_DYN='yes')} -env:__HB_3RD_DYN=yes{hbdyn}
+
+-hblib
+-inc
+
+-o${hb_name}
+
+-warn=low
+-pic
+
+minilzo.c
+
+# ORIGIN https://www.oberhumer.com/opensource/lzo/
+# URL    https://www.oberhumer.com/opensource/lzo/download/minilzo-2.10.tar.gz
+#
+# MAP    COPYING
+# MAP    lzoconf.h
+# MAP    lzodefs.h
+# MAP    minilzo.h
+# MAP    minilzo.c
+# MAP    README.LZO

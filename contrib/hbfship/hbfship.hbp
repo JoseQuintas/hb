@@ -1,0 +1,21 @@
+-hblib
+-inc
+
+-o${hb_name}
+
+-w3 -es2
+
+-hbx=${hb_name}
+
+fldarr.prg
+isdb.prg
+stroccur.prg
+
+dbsetloc.c
+exec.c
+index.c
+isbegseq.c
+isfunc.c
+secondfs.c
+strpeek.c
+users.c

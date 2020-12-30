@@ -1,0 +1,27 @@
+# EditorConfig is awesome: https://EditorConfig.org/
+
+# topmost EditorConfig file
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 3
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.sh]
+end_of_line = lf
+
+[*.bat]
+end_of_line = crlf
+
+[{*.css,*.html,*.js,*.json,*.rb,*.sh,*.vbs,*.yml,*.xml}]
+indent_size = 2
+
+[{*.svg}]
+indent_size = 1
+
+[{**/3rd/**,*.diff,*.patch}]
+trim_trailing_whitespace = false
+charset =

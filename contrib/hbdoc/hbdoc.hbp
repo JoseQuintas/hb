@@ -1,0 +1,33 @@
+-w3 -es2 -kmo -l
+
+-o${hb_name}
+
+-nulrdd
+
+hbdoc.prg
+_base.prg
+_html.prg
+_txt.prg
+_xml.prg
+
+hbgt.hbc
+hbyaml.hbc
+
+../../package/harbour.hbc
+
+{allgcc}-ldflag=-fno-lto
+
+# Always build in shared mode for these platforms because the tool is included
+# in std distro and we want to minimize its size.
+{_HB_BUILD_&!(HB_BUILD_SHARED='no')&(win|wce|os2)}-shared
+
+# localization
+-lng=pt_BR
+
+# localization update
+-po=po/hbdoc.en.po
+-rebuildpo
+-minipo
+
+# localization (for automatization with config/lang.hb)
+-3rd=_langhb_potgen=no

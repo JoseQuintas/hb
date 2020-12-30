@@ -1,0 +1,20 @@
+# Default
+*         text=auto
+
+# Binary files
+*.bmp     binary
+*.dbf     binary
+*.frm     binary
+*.gif     binary
+*.icns    binary
+*.ico     binary
+*.jpg     binary
+*.lbl     binary
+*.mdb     binary
+*.pdf     binary
+*.png     binary
+*.sqlite3 binary
+*.ttf     binary
+
+*.sh      text eol=lf
+*.bat     text eol=crlf

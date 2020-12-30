@@ -1,0 +1,82 @@
+/* $DOC$
+   $NAME$
+      ft_WoY()
+   $CATEGORY$
+      Date/Time
+   $ONELINER$
+      Find number of week within year
+   $SYNTAX$
+      ft_WoY( <dDate> ) --> nResult
+   $ARGUMENTS$
+      <dDate> is a date in the form `"mm/dd/yy"` or `"mm/dd/yyyy"`
+   $RETURNS$
+      Return numeric position of week within the year or NIL if
+      parameter does not conform.
+   $DESCRIPTION$
+      Considers a full week as starting on Sunday, ending on Saturday.
+      First week of year (week 1) may start on any day, and thus
+        contain any number of days.
+      Final week of year (week 53) may contain any number of days.
+      Handles dates with `CENTURY ON`|`OFF`, to allow for 21st century.
+      Date validation must be external to this function.
+   $EXAMPLES$
+      LOCAL dDate, GetList := {}
+
+      // These code fragments find the week number, given a date.
+
+      // literal character date
+      ? ft_WoY( 0d19910101 )  // --> 1
+
+      // presume OS date to be 1991-01-06
+      ? ft_WoY( Date() )      // --> 2
+
+      // date input
+      dDate := 0d0
+      @ 4, 10 GET cDate       // input 1991-07-04
+      READ
+      ? ft_WoY( dDate )       // --> 27
+
+      // last day of year
+      ? ft_WoY( 0d19911231 )  // --> 53
+   $END$
+ */
+
+/* $DOC$
+   $NAME$
+      ft_DoY()
+   $CATEGORY$
+      Date/Time
+   $ONELINER$
+      Find number of day within year
+   $SYNTAX$
+      ft_DoY( <dDate> ) --> nResult
+   $ARGUMENTS$
+      <dDate> is a date in the form `"mm/dd/yy"` or `"mm/dd/yyyy"`
+   $RETURNS$
+      Return numeric position of day within the year.
+      Return NIL if parameter does not conform.
+   $DESCRIPTION$
+      Finds the day number, considering 01/01 as day 1
+      Handles dates with `CENTURY ON`|`OFF`, to allow for 21st century.
+      Date validation must be external to this function.
+   $EXAMPLES$
+      LOCAL dDate, GetList := {}
+
+      // These code fragments find the day number, given a date.
+
+      // literal character date
+      ? ft_DoY( 0d19910101 )  // --> 1
+
+      // presume OS date to be 1991-01-06
+      ? ft_DoY( Date() )      // --> 6
+
+      // date input
+      dDate := 0d0
+      @ 4, 10 GET cDate       // input 1991-07-04
+      READ
+      ? ft_DoY( dDate )       // --> 185
+
+      // last day of year
+      ? ft_DoY( 0d19911231 )  // --> 365
+   $END$
+ */

@@ -1,0 +1,12 @@
+-hblib
+-inc
+
+-o${hb_name}
+
+-w3 -es2
+
+-hbx=${hb_name}
+
+ziparc.prg
+
+hbmzip.hbc

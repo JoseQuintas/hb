@@ -1,0 +1,238 @@
+/*
+ * Text file reading functions
+ *
+ * Copyright 2003 Marcelo Lombardo - lombardo@uol.com.br
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; see the file LICENSE.txt.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA (or visit https://www.gnu.org/licenses/).
+ *
+ * As a special exception, the Harbour Project gives permission for
+ * additional uses of the text contained in its release of Harbour.
+ *
+ * The exception is that, if you link the Harbour libraries with other
+ * files to produce an executable, this does not by itself cause the
+ * resulting executable to be covered by the GNU General Public License.
+ * Your use of that executable is in no way restricted on account of
+ * linking the Harbour library code into it.
+ *
+ * This exception does not however invalidate any other reasons why
+ * the executable file might be covered by the GNU General Public License.
+ *
+ * This exception applies only to the code released by the Harbour
+ * Project under the name Harbour.  If you copy code from other
+ * Harbour Project or Free Software Foundation releases into a copy of
+ * Harbour, as the General Public License permits, the exception does
+ * not apply to the code that you add in this way.  To avoid misleading
+ * anyone as to the status of such modified files, you must delete
+ * this exception notice from them.
+ *
+ * If you write modifications of your own for Harbour, it is your choice
+ * whether to permit this exception to apply to your modifications.
+ * If you do not wish that, delete this exception notice.
+ *
+ */
+
+#include "hbapi.h"
+#include "hbapifs.h"
+#include "hbset.h"
+#include "hbapiitm.h"
+#include "hbapierr.h"
+
+#define READING_BLOCK  4096
+
+static char * s_ReadLine( PHB_FILE hFileHandle, HB_ISIZ * pnBuffLen, const char ** pTerm, HB_ISIZ * pnTermSizes, HB_ISIZ nTerms, HB_BOOL * pfFound, HB_BOOL * pfEOF )
+{
+   HB_ISIZ nPosTerm = 0, nPos, nPosition;
+   int     nTries;
+   HB_ISIZ nRead = 0, nOffset, nSize;
+   char *  pBuff;
+
+   HB_TRACE( HB_TR_DEBUG, ( "s_ReadLine(%p, %" HB_PFS "d, %p, %p, %" HB_PFS "d, %p, %p)", ( void * ) ( HB_PTRUINT ) hFileHandle, *pnBuffLen, ( const void * ) pTerm, ( void * ) pnTermSizes, nTerms, ( void * ) pfFound, ( void * ) pfEOF ) );
+
+   *pfFound = HB_FALSE;
+   *pfEOF   = HB_FALSE;
+   nTries   = 0;
+   nOffset  = 0;
+   nSize    = *pnBuffLen;
+
+   if( *pnBuffLen < 10 )
+      *pnBuffLen = READING_BLOCK;
+
+   pBuff = ( char * ) hb_xgrab( *pnBuffLen + 1 );
+
+   do
+   {
+      if( nTries > 0 )
+      {
+         /* pBuff can be enlarged to hold the line as needed.. */
+         nSize    = ( *pnBuffLen * ( nTries + 1 ) ) + 1;
+         pBuff    = ( char * ) hb_xrealloc( pBuff, nSize );
+         nOffset += nRead;
+      }
+
+      /* read from file */
+      nRead = hb_fileResult( hb_fileRead( hFileHandle, pBuff + nOffset, nSize - nOffset, -1 ) );
+
+      /* scan the read buffer */
+      if( nRead > 0 )
+      {
+         for( nPos = 0; nPos < nRead; nPos++ )
+         {
+            for( nPosTerm = 0; nPosTerm < nTerms; nPosTerm++ )
+            {
+               /* Compare with the LAST terminator byte */
+               if( pBuff[ nOffset + nPos ] == pTerm[ nPosTerm ][ pnTermSizes[ nPosTerm ] - 1 ] && ( pnTermSizes[ nPosTerm ] - 1 ) <= ( nPos + nOffset ) )
+               {
+                  *pfFound = HB_TRUE;
+
+                  for( nPosition = 0; nPosition < ( pnTermSizes[ nPosTerm ] - 1 ); nPosition++ )
+                  {
+                     if( pTerm[ nPosTerm ][ nPosition ] != pBuff[ nOffset + ( nPos - pnTermSizes[ nPosTerm ] ) + nPosition + 1 ] )
+                     {
+                        *pfFound = HB_FALSE;
+                        break;
+                     }
+                  }
+
+                  if( *pfFound )
+                     break;
+               }
+            }
+
+            if( *pfFound )
+               break;
+         }
+
+         if( *pfFound )
+         {
+            *pnBuffLen = nOffset + nPos - pnTermSizes[ nPosTerm ] + 1;
+
+            pBuff[ *pnBuffLen ] = '\0';
+
+            /* Set handle pointer in the end of the line */
+            hb_fileSeek( hFileHandle, ( ( nRead - nPos ) * -1 ) + 1, FS_RELATIVE );
+
+            return pBuff;
+         }
+      }
+      else
+      {
+         if( ! *pfFound )
+         {
+            if( nTries == 0 )
+            {
+               pBuff[ 0 ] = '\0';
+               *pnBuffLen = 0;
+            }
+            else
+            {
+               pBuff[ nOffset + nRead ] = '\0';
+               *pnBuffLen = nOffset + nRead;
+            }
+
+            *pfEOF = HB_TRUE;
+         }
+      }
+
+      nTries++;
+   }
+   while( ! *pfFound && nRead > 0 );
+
+   return pBuff;
+}
+
+/* hb_FReadLine( <Handle>, <@buffer>, [<aTerminators | cTerminator>], [<nReadingBlock>] ) --> nError */
+HB_FUNC( HB_FREADLINE )
+{
+   PHB_FILE hFileHandle;
+
+   if( HB_ISNUM( 1 ) )
+      hFileHandle = hb_fileFromHandle( hb_numToHandle( hb_parnint( 1 ) ) );
+   else
+      hFileHandle = hb_fileParamGet( 1 );
+
+   if( hFileHandle )
+   {
+      const char ** Term;
+      char *        pBuffer;
+      HB_ISIZ *     pnTermSizes;
+      HB_ISIZ       nSize = hb_parns( 4 );
+      HB_ISIZ       nTerms;
+      HB_BOOL       fFound, fEOF;
+
+      if( HB_ISARRAY( 3 ) || HB_ISCHAR( 3 ) )
+      {
+         PHB_ITEM pTerm1;
+
+         if( HB_ISARRAY( 3 ) )
+         {
+            HB_ISIZ i;
+
+            pTerm1 = hb_param( 3, HB_IT_ARRAY );
+            nTerms = hb_arrayLen( pTerm1 );
+
+            if( nTerms <= 0 )
+            {
+               hb_errRT_BASE_SubstR( EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS );
+               return;
+            }
+
+            Term        = ( const char ** ) hb_xgrab( sizeof( char * ) * nTerms );
+            pnTermSizes = ( HB_ISIZ * ) hb_xgrab( sizeof( HB_ISIZ ) * nTerms );
+
+            for( i = 0; i < nTerms; i++ )
+            {
+               Term[ i ]        = hb_arrayGetCPtr( pTerm1, i + 1 );
+               pnTermSizes[ i ] = hb_arrayGetCLen( pTerm1, i + 1 );
+            }
+         }
+         else
+         {
+            pTerm1           = hb_param( 3, HB_IT_STRING );
+            Term             = ( const char ** ) hb_xgrab( sizeof( char * ) );
+            pnTermSizes      = ( HB_ISIZ * ) hb_xgrab( sizeof( HB_ISIZ ) );
+            Term[ 0 ]        = hb_itemGetCPtr( pTerm1 );
+            pnTermSizes[ 0 ] = hb_itemGetCLen( pTerm1 );
+            nTerms           = 1;
+         }
+      }
+      else
+      {
+         Term             = ( const char ** ) hb_xgrab( sizeof( char * ) );
+         pnTermSizes      = ( HB_ISIZ * ) hb_xgrab( sizeof( HB_ISIZ ) );
+         Term[ 0 ]        = "\r\n";    /* FIXME: Should be replaced with the default EOL sequence */
+         nTerms           = 1;
+         pnTermSizes[ 0 ] = 2;
+      }
+
+      if( nSize == 0 )
+         nSize = READING_BLOCK;
+
+      pBuffer = s_ReadLine( hFileHandle, &nSize, Term, pnTermSizes, nTerms, &fFound, &fEOF );
+
+      if( ! hb_storclen_buffer( pBuffer, nSize, 2 ) )
+         hb_xfree( pBuffer );
+
+      hb_retni( fEOF ? FS_ERROR : 0 );
+
+      hb_xfree( ( void * ) Term );
+      hb_xfree( pnTermSizes );
+
+      if( HB_ISNUM( 1 ) )
+         hb_fileDetach( hFileHandle );
+   }
+   else
+      hb_errRT_BASE_SubstR( EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS );
+}
