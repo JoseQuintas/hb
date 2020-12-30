@@ -104,3 +104,13 @@ HB_FUNC( WIN_RUNDETACHED )
    hb_strfree( hCommandName );
    hb_strfree( hCommandLine );
 }
+
+HB_FUNC( WIN_N2P )  /* NOTE: Unsafe: allows to pass arbitary pointers to functions, potentially causing a crash or worse. */
+{
+   hb_retptr( HB_ISPOINTER( 1 ) ? hb_parptr( 1 ) : ( void * ) ( HB_PTRDIFF ) hb_parnint( 1 ) );
+}
+
+HB_FUNC( WIN_P2N )  /* NOTE: Unsafe: will reveal the numeric value of a pointer */
+{
+   hb_retnint( HB_ISNUM( 1 ) ? hb_parnint( 1 ) : ( HB_PTRDIFF ) hb_parptr( 1 ) );
+}
