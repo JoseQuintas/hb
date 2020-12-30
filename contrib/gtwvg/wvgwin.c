@@ -276,6 +276,28 @@ HB_FUNC( WVG_SETLAYEREDWINDOWATTRIBUTES )
    }
 }
 
+/* jpa_SetLayeredWindowAttributes( hWnd, nRGB, nOpacityFactor [0-255] ) */
+HB_FUNC( JPA_SETLAYEREDWINDOWATTRIBUTES )
+{
+   HINSTANCE h = GetModuleHandle( TEXT( "user32.dll" ) );
+
+   if( h )
+   {
+      wvtSetLayeredWindowAttributes pfnLayered = ( wvtSetLayeredWindowAttributes ) HB_WINAPI_GETPROCADDRESS( h, "SetLayeredWindowAttributes" );
+
+      if( pfnLayered )
+      {
+         HWND     hWnd = hbwapi_par_raw_HWND( 1 );
+         COLORREF cr   = hbwapi_par_COLORREF_def( 2, RGB( 255, 255, 255 ) );
+
+         SetWindowLong( hWnd, GWL_EXSTYLE, GetWindowLong( hWnd, GWL_EXSTYLE ) | WS_EX_LAYERED );
+
+         ( void ) pfnLayered( hWnd, cr, ( BYTE ) hb_parni( 3 ), LWA_COLORKEY );
+      }
+      FreeLibrary( h );
+   }
+}
+
 HB_FUNC( WVG_SENDTOOLBARMESSAGE )
 {
    HWND hTB = hbwapi_par_raw_HWND( 1 );
