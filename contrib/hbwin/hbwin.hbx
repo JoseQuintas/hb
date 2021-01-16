@@ -385,6 +385,7 @@ DYNAMIC win_hPrevInstance
 DYNAMIC win_LoadBitmapFile
 DYNAMIC win_LoadResource
 DYNAMIC win_MAPISendMail
+DYNAMIC win_n2p
 DYNAMIC win_nCmdShow
 DYNAMIC win_OEMToANSI
 DYNAMIC win_oleAuto
@@ -417,6 +418,7 @@ DYNAMIC win_osIsXP
 DYNAMIC win_osNetRegOk
 DYNAMIC win_osNetVRedirOk
 DYNAMIC win_osVersionInfo
+DYNAMIC win_p2n
 DYNAMIC win_PrintDataRaw
 DYNAMIC win_PrintDlgDC
 DYNAMIC win_printerExists
