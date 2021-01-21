@@ -2754,6 +2754,10 @@ STATIC FUNCTION __hbmk( aArgs, nArgTarget, nLevel, /* @ */ lPause, /* @ */ lExit
       DO CASE
       CASE Empty( cParam )
          /* do nothing */
+
+      CASE cParamL == "-skip"
+         EXIT
+
       CASE hb_LeftEq( cParamL, "-comp=" ) .OR. ;
            hb_LeftEq( cParamL, "-plat=" ) .OR. ;
            hb_LeftEq( cParamL, "-compiler=" ) .OR. ; /* Compatibility HB_LEGACY_LEVEL4 */
@@ -6513,7 +6517,7 @@ STATIC FUNCTION __hbmk( aArgs, nArgTarget, nLevel, /* @ */ lPause, /* @ */ lExit
       ENDIF
       DO CASE
       CASE ! lStopAfterCComp
-         IF Empty( cExt ) .AND. ! Empty( cBinExt )
+         IF ! cName == "" .AND. Empty( cExt ) .AND. ! Empty( cBinExt )
             hbmk[ _HBMK_cPROGNAME ] := hb_FNameMerge( cDir, cName, cBinExt )
          ENDIF
          IF l_cIMPLIBNAME == NIL
@@ -6525,7 +6529,7 @@ STATIC FUNCTION __hbmk( aArgs, nArgTarget, nLevel, /* @ */ lPause, /* @ */ lExit
             l_cLIBSELF := cName
          ENDIF
          cName := hbmk[ _HBMK_cDynLibPrefix ] + cName
-         IF Empty( cExt ) .AND. ! Empty( hbmk[ _HBMK_cDynLibExt ] )
+         IF ! cName == "" .AND. Empty( cExt ) .AND. ! Empty( hbmk[ _HBMK_cDynLibExt ] )
             cExt := hbmk[ _HBMK_cDynLibExt ]
          ENDIF
          hbmk[ _HBMK_cPROGNAME ] := hb_FNameMerge( cDir, cName, cExt )
