@@ -578,6 +578,9 @@ FUNCTION wvt_GetRGBColorByString( cColor, nForeBack )
    LOCAL nIndex := 0
 
    IF HB_ISSTRING( cColor )
+      IF ( n := At( ",", cColor ) ) > 0          // if pass SetColor()
+         cColor := Substr( cColor, 1, n - 1 )
+      ENDIF
       IF ( n := At( "/", cColor ) ) > 0
          IF hb_defaultValue( nForeBack, 0 ) == 0
             s := Left( cColor, n - 1 )
@@ -587,16 +590,20 @@ FUNCTION wvt_GetRGBColorByString( cColor, nForeBack )
       ELSE
          s := cColor
       ENDIF
-      s := Upper( s )
-      lEnh := "*" $ s .OR. "+" $ s
-      IF lEnh
-         s := hb_StrReplace( s, "*+" )
-      ENDIF
-      IF ( nIndex := hb_AScan( { "N", "B", "G", "BG", "R", "RB", "GR", "W" }, s,,, .T. ) ) > 0
+      IF Val( s ) > 0 .AND. Val( s ) < 16
+         nIndex := Val( s )
+      ELSE
+         s := Upper( s )
+         lEnh := "*" $ s .OR. "+" $ s
          IF lEnh
-            nIndex += 8
+            s := hb_StrReplace( s, "*+" )
          ENDIF
-         nIndex--
+         IF ( nIndex := hb_AScan( { "N", "B", "G", "BG", "R", "RB", "GR", "W" }, s,,, .T. ) ) > 0
+            IF lEnh
+               nIndex += 8
+            ENDIF
+            nIndex--
+         ENDIF
       ENDIF
    ENDIF
 
