@@ -1,0 +1,72 @@
+#
+# create: JoseQuintas/harbour_34/hb34_last
+#
+
+name: Harbour 3.4 mingw last
+
+on:
+  push:
+  schedule:
+   - cron: "0 2 1 * *"
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Harbour 3.4 mingw last'
+        default: 'hb34_last'
+        required: true
+
+jobs:
+
+  Build:
+    runs-on: windows-latest
+    steps:
+
+    - name: Install Source Code
+      env:
+         REPO: ${{ github.repository }}
+      run: |
+         c:
+         git clone https://github.com/$env:repo c:\temp\harbour34 --depth 10
+         cd \temp\harbour34
+         md \temp\harbour
+         md \temp\harbour\bin
+         git config user.email "you@example.com"
+         git config user.name "Your Name"
+         git pull https://github.com/vszakats/hb
+
+    - name: Build 32 bits
+      env:
+         HB_BUILD_STRIP: all
+         HB_COMPILER: mingw
+         HB_INSTALL_PREFIX: c:\temp\harbour
+         PATH: c:\msys64\mingw32\bin;c:\temp\harbour\bin
+      run: |
+         c:
+         cd c:\temp\harbour34
+         mingw32-make clean install
+
+    - name: Build 64 bits
+      env:
+         HB_BUILD_STRIP: all
+         HB_COMPILER: mingw64
+         HB_INSTALL_PREFIX: c:\temp\harbour
+         PATH: c:\msys64\mingw64\bin;c:\temp\harbour\bin
+      run: |
+         c:
+         cd \temp\harbour34
+         mingw32-make clean install
+
+    - name: Zip
+      env:
+         PATH: c:\program files\7-zip
+      run: |
+         c:
+         md \temp\harbour\comp
+         cd \temp\harbour
+         7z a -r c:\temp\hb34_last.7z c:\temp\harbour\*.* -xr'!.git' -xr'!.github' -xr'!.hbmk'
+
+    - name: Save
+      uses: actions/upload-artifact@v2
+      with:
+         name: hb34_last
+         path: c:\temp\hb34_last.7z
